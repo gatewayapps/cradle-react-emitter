@@ -1,5 +1,6 @@
 
-import {CradleSchema, EmitterOptions, IConsole, ICradleEmitter} from '@gatewayapps/cradle'
+import {CradleSchema, EmitterOptions, IConsole, ICradleEmitter, PropertyTypes} from '@gatewayapps/cradle'
+import { IReactEmitterOptions } from './IReactEmitterOptions'
 
 export enum ReactComponentTypes {
   Detail,
@@ -9,15 +10,15 @@ export enum ReactComponentTypes {
 
 export default class ReactEmitter implements ICradleEmitter {
 
-  public console: IConsole
-  public options: EmitterOptions<>
+  public console?: IConsole
+  public options?: EmitterOptions<IReactEmitterOptions>
 
-  public prepareEmitter(options: EmitterOptions, console: IConsole) {
+  public prepareEmitter(options: EmitterOptions<IReactEmitterOptions>, console: IConsole) {
     this.console = console
     this.options = options
   }
 
   public emitSchema(schema: CradleSchema) {
-
+    return
   }
 }
