@@ -9,11 +9,19 @@ module.exports = new CradleConfig(loaderOptions, [{module: 'cradle-react-emitter
 
   /** You must return a string  */
   getOutputPath: (model, componentType) => {
-    
+      const fileName = `${model.Name}${componentType}.ts`
+      return `./src/client/components/${model.Name}/${fileName}`
   },
-
+  renderModelForComponentType: (model, componentType, renderedProperties) =>{
+    return (
+      `<div>
+        ${renderedProperties.join('\n')}
+       </div>
+      `
+    )
+  },
   /** This method is used when rendering the editable component for a model */
-  renderEditProperty: (propertyName, propertyType, modelName) => {
+  renderEditProperty: (propertyName, propertyType, model) => {
     /*
       In here, you could do a switch on propertyType.TypeName to render
       different JSX for different property types
@@ -21,17 +29,25 @@ module.exports = new CradleConfig(loaderOptions, [{module: 'cradle-react-emitter
     return (
     `<div>
       <label>${propertyName}</label>
-      <input type='text' value={this.props.${modelName}[${propertyName}]} onChange={(e)=>{this.props.set${propertyName}(e.target.value)} />
+      <input type='text' value={this.props.${model.Name}[${propertyName}]} onChange={(e)=>{this.props.set${propertyName}(e.target.value)} />
     </div>`)
   },
-
   /** This method is used when rendering the detail component for a model */
-  renderDetailsProperty: (propertyName, modelName, propertyType) => {
+  renderDetailsProperty: (propertyName, propertyType, model) => {
     return (
       `<div>
         <label>${propertyName}</label>
-        {this.props.${modelName}[${propertyName}]}
+        {this.props.${model.Name}[${propertyName}]}
       </div>`)
   },
+  renderListProperty: (propertyName, propertyType, model) => {
+    return (
+      `<td>{this.props.${model.Name}[${propertyName}]}</td>`)
+  },
+  renderSelectProperty: (propertyName, propertyType, model) => {
+    return (
+      `<Option value={this.props.${model.Name}.id}>{this.props.${model.Name}.name}</Option>`
+    )
+  }
   
 }}])
