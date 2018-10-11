@@ -6,6 +6,7 @@ export interface IReactEmitterOptions {
   readonly getOutputPath: (modelName: string, componentType: ReactComponentTypes) => string
   readonly overwriteExisting: boolean
   readonly shouldRenderModelForComponentType?: (model: CradleModel, componentType: ReactComponentTypes) => boolean
+  readonly shouldRenderPropertyForComponentType?: (model: CradleModel, propertyName: string, propertyType: PropertyType, componentType: ReactComponentTypes) => boolean
   readonly renderModelForComponentType: (model: CradleModel, componentType: ReactComponentTypes, renderedProperties: string[]) => string
   readonly renderListProperty: (propertyName: string, propertyType: PropertyType, model: CradleModel) => string
   readonly renderEditProperty: (propertyName: string, propertyType: PropertyType, model: CradleModel) => string
