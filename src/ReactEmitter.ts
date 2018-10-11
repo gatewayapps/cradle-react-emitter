@@ -71,7 +71,9 @@ export default class ReactEmitter implements ICradleEmitter {
     const propertyNames = Object.keys(model.Properties)
     propertyNames.forEach((name) => {
       const property = model.Properties[name]
-      renderedProperties.push(this.renderPropertyForComponentType(name, property, componentType, model))
+      if (!this.options!.options.shouldRenderPropertyForComponentType || this.options!.options.shouldRenderPropertyForComponentType!(model, name, property, componentType)) {
+        renderedProperties.push(this.renderPropertyForComponentType(name, property, componentType, model))
+      }
     })
 
     const fileContents = this.options!.options.renderModelForComponentType(model, componentType, renderedProperties)
