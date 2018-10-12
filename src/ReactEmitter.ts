@@ -72,7 +72,7 @@ export default class ReactEmitter implements ICradleEmitter {
     const absoluteDir = path.dirname(absoluteFilename)
     ensureDirSync(absoluteDir)
     const renderedChildren: Record<string, string | undefined> = {}
-    if (this.options.options.renderPropertyForComponentType) {
+    if (this.options.options.renderPropertyForComponentType && model.Properties) {
       const propertyNames = Object.keys(model.Properties)
       propertyNames.forEach((name) => {
         const property = model.Properties[name]
@@ -85,7 +85,7 @@ export default class ReactEmitter implements ICradleEmitter {
       })
     }
 
-    if (!!this.options.options.renderReferenceForComponentType) {
+    if (!!this.options.options.renderReferenceForComponentType && model.References) {
       const referenceNames = Object.keys(model.References)
       referenceNames.forEach((name) => {
         const reference = model.References.get(name)
