@@ -43,10 +43,14 @@ export default class ReactEmitter implements ICradleEmitter {
         emittedFiles.push(selectFile.toString())
       }
 
-      const otherFiles: string[] = []
-      this.options.options.additionalComponentTypes!.forEach((ct) => {
-        const rendered = this.emitModelForComponentType(m, ct)
-      })
+      if (this.options.options.additionalComponentTypes) {
+        this.options.options.additionalComponentTypes.forEach((ct) => {
+          const rendered = this.emitModelForComponentType(m, ct)
+          if (rendered) {
+            emittedFiles.push(rendered.toString())
+          }
+        })
+      }
     })
     if (this.options.options.onComplete) {
       this.options.options.onComplete(emittedFiles)

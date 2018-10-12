@@ -1,6 +1,6 @@
 {
   "name": "@gatewayapps/cradle-react-emitter",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A cradle emitter for react components",
   "main": "./dist/index.js",
   "scripts": {
