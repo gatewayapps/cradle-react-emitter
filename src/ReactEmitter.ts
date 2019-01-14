@@ -15,9 +15,9 @@ export enum ReactComponentTypes {
 
 export default class ReactEmitter implements ICradleEmitter {
   public console?: IConsole
-  public options!: EmitterOptions<IReactEmitterOptions>
+  public options!: IReactEmitterOptions
 
-  public async prepareEmitter(options: EmitterOptions<IReactEmitterOptions>, console: IConsole) {
+  public constructor(options: IReactEmitterOptions, console: IConsole) {
     this.console = console
     this.options = options
   }
@@ -43,8 +43,8 @@ export default class ReactEmitter implements ICradleEmitter {
         emittedFiles.push(selectFile.toString())
       }
 
-      if (this.options.options.additionalComponentTypes) {
-        this.options.options.additionalComponentTypes.forEach((ct) => {
+      if (this.options.additionalComponentTypes) {
+        this.options.additionalComponentTypes.forEach((ct) => {
           const rendered = this.emitModelForComponentType(m, ct)
           if (rendered) {
             emittedFiles.push(rendered.toString())
@@ -52,22 +52,22 @@ export default class ReactEmitter implements ICradleEmitter {
         })
       }
     })
-    if (this.options.options.onComplete) {
-      this.options.options.onComplete(emittedFiles)
+    if (this.options.onComplete) {
+      this.options.onComplete(emittedFiles)
     }
   }
 
   private emitModelForComponentType(model: CradleModel, componentType: ReactComponentTypes | string): string | boolean {
-    if (this.options.options.shouldRenderModelForComponentType) {
-      if (this.options.options.shouldRenderModelForComponentType!(model, componentType) === false) {
+    if (this.options.shouldRenderModelForComponentType) {
+      if (this.options.shouldRenderModelForComponentType!(model, componentType) === false) {
         this.console!.debug(colors.red(`Skipping ${model.Name}:${componentType}`))
         return false
       }
     }
 
-    const fileName = this.options.options.getOutputPathForComponentType(model.Name, componentType)
+    const fileName = this.options.getOutputPathForComponentType(model.Name, componentType)
     const absoluteFilename = path.resolve(fileName)
-    if (existsSync(absoluteFilename) && !this.options.options.overwriteExisting) {
+    if (existsSync(absoluteFilename) && !this.options.overwriteExisting) {
       this.console!.debug(colors.red(`Skipping ${absoluteFilename} as it already exists`))
       return false
     }
@@ -76,35 +76,35 @@ export default class ReactEmitter implements ICradleEmitter {
     const absoluteDir = path.dirname(absoluteFilename)
     ensureDirSync(absoluteDir)
     const renderedChildren: Record<string, string | undefined> = {}
-    if (this.options.options.renderPropertyForComponentType && model.Properties) {
+    if (this.options.renderPropertyForComponentType && model.Properties) {
       const propertyNames = Object.keys(model.Properties)
       propertyNames.forEach((name) => {
         const property = model.Properties[name]
         if (
-          this.options.options.shouldRenderPropertyForComponentType === undefined ||
-          this.options.options.shouldRenderPropertyForComponentType!(model, name, property, componentType)
+          this.options.shouldRenderPropertyForComponentType === undefined ||
+          this.options.shouldRenderPropertyForComponentType!(model, name, property, componentType)
         ) {
-          renderedChildren[name] = this.options.options.renderPropertyForComponentType!(model, name, property, componentType)
+          renderedChildren[name] = this.options.renderPropertyForComponentType!(model, name, property, componentType)
         }
       })
     }
 
-    if (!!this.options.options.renderReferenceForComponentType && model.References) {
+    if (!!this.options.renderReferenceForComponentType && model.References) {
       const referenceNames = Object.keys(model.References)
       referenceNames.forEach((name) => {
         const reference = model.References.get(name)
         if (reference !== undefined) {
           if (
-            this.options.options.shouldRenderReferenceForComponentType === undefined ||
-            this.options.options.shouldRenderReferenceForComponentType!(model, name, reference, componentType)
+            this.options.shouldRenderReferenceForComponentType === undefined ||
+            this.options.shouldRenderReferenceForComponentType!(model, name, reference, componentType)
           ) {
-            renderedChildren[name] = this.options.options.renderReferenceForComponentType!(model, name, reference, componentType)
+            renderedChildren[name] = this.options.renderReferenceForComponentType!(model, name, reference, componentType)
           }
         }
       })
     }
 
-    const fileContents = this.options.options.renderModelForComponentType(model, componentType, renderedChildren)
+    const fileContents = this.options.renderModelForComponentType(model, componentType, renderedChildren)
     writeFileSync(absoluteFilename, fileContents, 'utf8')
     return absoluteFilename
   }

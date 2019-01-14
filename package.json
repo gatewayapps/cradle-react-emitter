@@ -1,6 +1,6 @@
 {
   "name": "@gatewayapps/cradle-react-emitter",
-  "version": "0.1.2",
+  "version": "0.4.0",
   "description": "A cradle emitter for react components",
   "main": "./dist/index.js",
   "scripts": {
@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/gatewayapps/cradle-react-emitter#readme",
   "devDependencies": {
-    "@gatewayapps/cradle": "0.0.11",
+    "@gatewayapps/cradle": "^0.4.0",
     "@types/colors": "^1.2.1",
     "@types/fs-extra": "^5.0.4",
     "@types/node": "^10.11.5",
